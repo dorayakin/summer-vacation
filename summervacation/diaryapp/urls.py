@@ -1,6 +1,8 @@
 from django.urls import path
-from . import views
-
+from .views import home, user_login
+app_name = 'diaryapp'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', home.as_view(), name='home'),
+    path('login/', user_login.as_view(), name='login'),
+    path('home/', home.as_view(), name='home')
 ]

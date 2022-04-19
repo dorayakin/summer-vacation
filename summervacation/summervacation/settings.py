@@ -90,7 +90,9 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'diaryapp.DiaryUser'
-
+LOGIN_REDIRECT_URL = 'diaryapp:home'
+LOGIN_URL = 'diaryapp:userlogin'
+LOGOUT_REDIRECT_URL = ''
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 

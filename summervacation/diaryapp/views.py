@@ -1,8 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib.auth.views import LoginView
+from django.views import generic
 
 # Create your views here.
 
 
-def index(request):
-    return HttpResponse("You're at the diaryapp index.")
+class user_login(LoginView):
+    template_name = 'diaryapp/login.html'
+
+
+class home(generic.TemplateView):
+    template_name = 'diaryapp\home.html'
