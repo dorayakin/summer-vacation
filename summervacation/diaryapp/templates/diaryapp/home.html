@@ -9,8 +9,12 @@
 </head>
 
 <body>
-  {% csrf_token %}
+
   <h1>Welcome</h1>
+  <h3>{{user.username}}</h3>
+  <form action="{% url 'diaryapp:logout' %}" method=post>{% csrf_token %}
+    <input type="submit" class="button" title="Sign Out" value="Sign Out"></input>
+  </form>
 </body>
 
 </html>
