@@ -6,6 +6,7 @@ from django.views import generic
 
 class user_login(LoginView):
     template_name = 'diaryapp/login.html'
+    redirect_authenticated_user = True
 
 
 class home(generic.TemplateView):
