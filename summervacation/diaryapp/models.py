@@ -13,9 +13,9 @@ class DiaryUserManager(BaseUserManager):
 
     def _create_user(self, username, email, password, **extra_fields):
         if not username:
-            raise ValueError('ユーザーネームを入力してください')
+            raise ValueError("ユーザーネームを入力してください")
         if not email:
-            raise ValueError('Emailを入力して下さい')
+            raise ValueError("Emailを入力して下さい")
         email = self.normalize_email(email)
         username = self.model.normalize_username(username)
         user = self.model(username=username, email=email, **extra_fields)
@@ -24,21 +24,21 @@ class DiaryUserManager(BaseUserManager):
         return user
 
     def create_user(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_active', False)
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_active", False)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, username, password, **extra_fields)
 
     def create_superuser(self, username, email, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('first_name','DEFAULT_FIRST_NAME')
-        extra_fields.setdefault('last_name','DEFAULT_LAST_NAME')
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('is_staff=Trueである必要があります。')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('is_superuser=Trueである必要があります。')
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("first_name", "DEFAULT_FIRST_NAME")
+        extra_fields.setdefault("last_name", "DEFAULT_LAST_NAME")
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("is_staff=Trueである必要があります。")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("is_superuser=Trueである必要があります。")
         return self._create_user(username, email, **extra_fields)
 
 
@@ -107,3 +107,36 @@ class DiaryUser(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class DiaryManager(models.Manager):
+    pass
+
+
+class Diary(models.Model):
+    writer = models.ForeignKey(DiaryUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    main_text = models.TextField(max_length=2000, blank=True, null=True)
+    pub_date = models.DateTimeField("作成日時")
+    TEMPORARY = "T"
+    UNAPPROVED = "U"
+    APPROVED = "A"
+    DELETED = "D"
+    PUBLIC_MODE_CHOICES = [
+        (TEMPORARY, "一次保存"),
+        (UNAPPROVED, "公開申請"),
+        (APPROVED, "公開済"),
+        (DELETED, "削除"),
+    ]
+    public_mode = models.CharField(
+        max_length=1,
+        choices=PUBLIC_MODE_CHOICES,
+        default=TEMPORARY,
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = "posted_diaries"
+        verbose_name_plural = "Diaries"
