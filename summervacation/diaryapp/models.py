@@ -134,5 +134,9 @@ class Diary(models.Model):
         default=TEMPORARY,
     )
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         db_table = "posted_diaries"
+        verbose_name_plural = "Diaries"
