@@ -11,7 +11,7 @@
 <body>
   <div class="form-wrapper">
     <h1>Sign In</h1>
-    <form action="{% url 'diaryapp:login' %}" method=post>{% csrf_token %}
+    <form action="{% url 'diaryapp:login'%}" method=post>{% csrf_token %}
 
       {{ form.non_field_errors }}
       <div class="form-item">
