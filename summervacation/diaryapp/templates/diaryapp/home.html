@@ -5,16 +5,29 @@
   <meta charset="UTF-8">
   <meta name=”description”>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>ホーム</title>
 </head>
 
 <body>
 
   <h1>Welcome</h1>
   <h3>{{user.username}}</h3>
+
+  {% if latest_diary_list %}
+  <ul>
+    {% for diary in latest_diary_list %}
+    <li><a href="{% url 'diaryapp:detail' diary.id %}">{{ diary.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No diaries are available.</p>
+  {% endif %}
+
+
   <form action="{% url 'diaryapp:logout' %}" method=post>{% csrf_token %}
     <input type="submit" class="button" title="Sign Out" value="Sign Out"></input>
   </form>
+
 </body>
 
 </html>
