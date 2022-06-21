@@ -23,6 +23,10 @@
   <p>No diaries are available.</p>
   {% endif %}
 
+  <form action="{% url 'diaryapp:create' %}" method=post>
+    {% csrf_token %}
+    <input type="submit" value="新規投稿">
+  </form>
 
   <form action="{% url 'diaryapp:logout' %}" method=post>{% csrf_token %}
     <input type="submit" class="button" title="Sign Out" value="Sign Out"></input>

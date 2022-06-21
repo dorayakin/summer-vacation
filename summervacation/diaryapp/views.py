@@ -1,7 +1,8 @@
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
 
+from .forms import DiaryForm
 from .models import Diary
 
 # Create your views here.
@@ -27,3 +28,15 @@ class home(LoginRequiredMixin, generic.ListView):
 class detail_view(LoginRequiredMixin, generic.DetailView):
     model = Diary
     template_name = 'diaryapp/detail.html'
+
+
+class create_diary(LoginRequiredMixin, generic.CreateView):
+    model = Diary
+    template_name = 'diaryapp/create.html'
+    form_class = DiaryForm
+    success_url = 'diaryapp:create'
+
+
+class update_diary(UserPassesTestMixin, generic.UpdateView):
+    pass
+    # test_func(self)
