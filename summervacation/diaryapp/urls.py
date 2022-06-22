@@ -8,4 +8,5 @@ urlpatterns = [
     path('home/', views.home.as_view(), name='home'),
     path('<int:pk>/detail/', views.detail_view.as_view(), name='detail'),
     path('create/', views.create_diary.as_view(), name='create'),
+    path('<int:pk>/edit/', views.edit_diary.as_view(),name ='edit'),
 ]

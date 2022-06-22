@@ -16,7 +16,9 @@
   {% if latest_diary_list %}
   <ul>
     {% for diary in latest_diary_list %}
-    <li><a href="{% url 'diaryapp:detail' diary.id %}">{{ diary.title }}</a></li>
+    <li><a href="{% url 'diaryapp:detail' diary.id %}">{{ diary.title }}</a>
+      <a href="{% url 'diaryapp:edit' diary.id %}">編集</a>
+    </li>
     {% endfor %}
   </ul>
   {% else %}

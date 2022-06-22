@@ -1,3 +1,4 @@
+import logging
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
@@ -34,9 +35,17 @@ class create_diary(LoginRequiredMixin, generic.CreateView):
     model = Diary
     template_name = 'diaryapp/create.html'
     form_class = DiaryForm
-    success_url = 'diaryapp:create'
+    success_url = 'diaryapp:home'
 
 
-class update_diary(UserPassesTestMixin, generic.UpdateView):
-    pass
-    # test_func(self)
+class edit_diary(UserPassesTestMixin, generic.UpdateView):
+    model = Diary
+    template_name = 'diaryapp/edit.html'
+    form_class = DiaryForm
+    succsess_url = 'diary:home'
+    
+    def test_func(self):
+        diary_writer = self.model.objects.get(writer=self.kwargs['pk'])
+        logging.info(diary_writer.writer.id)
+        if self.request.user.id == diary_writer.writer.id:
+            return True 
