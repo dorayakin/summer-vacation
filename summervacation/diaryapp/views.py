@@ -1,9 +1,8 @@
-import logging
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import DiaryForm
 from .models import Diary
 
 # Create your views here.
@@ -23,7 +22,7 @@ class home(LoginRequiredMixin, generic.ListView):
     context_object_name = 'latest_diary_list'
 
     def get_queryset(self):
-        return Diary.objects.order_by('-pub_date')[:5]
+        return Diary.objects.order_by('-pub_date')[:10]
 
 
 class detail_view(LoginRequiredMixin, generic.DetailView):
@@ -34,18 +33,26 @@ class detail_view(LoginRequiredMixin, generic.DetailView):
 class create_diary(LoginRequiredMixin, generic.CreateView):
     model = Diary
     template_name = 'diaryapp/create.html'
-    form_class = DiaryForm
-    success_url = 'diaryapp:home'
+    fields = ['title', 'main_text', 'public_mode']
+
+    def form_valid(self, form):
+        form.instance.writer = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('diaryapp:detail', kwargs={'pk': self.object.pk})
 
 
-class edit_diary(UserPassesTestMixin, generic.UpdateView):
+class edit_diary(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Diary
     template_name = 'diaryapp/edit.html'
-    form_class = DiaryForm
-    succsess_url = 'diary:home'
-    
+    fields = ['title', 'main_text', 'public_mode']
+
     def test_func(self):
-        diary_writer = self.model.objects.get(writer=self.kwargs['pk'])
-        logging.info(diary_writer.writer.id)
-        if self.request.user.id == diary_writer.writer.id:
-            return True 
+        diary = self.get_object()
+        if self.request.user == diary.writer:
+            return True
+        return False
+
+    def get_success_url(self):
+        return reverse_lazy('diaryapp:detail', kwargs={'pk': self.object.pk})

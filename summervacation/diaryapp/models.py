@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -117,7 +118,7 @@ class Diary(models.Model):
     writer = models.ForeignKey(DiaryUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     main_text = models.TextField(max_length=2000, blank=True, null=True)
-    pub_date = models.DateTimeField("作成日時")
+    pub_date = models.DateTimeField("作成日時",default=datetime.now)
     TEMPORARY = "T"
     UNAPPROVED = "U"
     APPROVED = "A"
