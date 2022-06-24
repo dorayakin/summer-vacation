@@ -33,7 +33,7 @@ class DiaryUserAdmin(UserAdmin):
 
 
 class DiaryAdmin(admin.ModelAdmin):
-    list_display = ("title", "pub_date", "writer", "public_mode")
+    list_display = ("id", "title", "pub_date", "writer", "public_mode")
     list_filter = ["pub_date", "public_mode"]
     search_fields = ["title", "main_text", "writer__username"]
     search_help_text = "title,main_text,writerで検索できます"
