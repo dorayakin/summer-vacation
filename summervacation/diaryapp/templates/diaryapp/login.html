@@ -1,37 +1,19 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends 'diaryapp/base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name=”description”>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ログイン画面</title>
-</head>
+{% load django_bootstrap5 %}
 
-<body>
-  <div class="form-wrapper">
-    <h1>Sign In</h1>
-    <form action="{% url 'diaryapp:login'%}" method=post>{% csrf_token %}
+{% block title %}
+ログイン画面
+{% endblock %}
 
-      {{ form.non_field_errors }}
-      <div class="form-item">
-        <label for="username"></label>
-        <input type="username" name="username" required="required" placeholder="username"></input>
-      </div>
-      <div class="form-item">
-        <label for="password"></label>
-        <input type="password" name="password" required="required" placeholder="Password"></input>
-      </div>
-      <div class="button-panel">
-        <input type="submit" class="button" title="Sign In" value="Sign In"></input>
-      </div>
-    </form>
+{% block content %}
 
-    <div class="form-footer">
-      <p><a href="#">Create an account</a></p>
-      <p><a href="#">Forgot password?</a></p>
-    </div>
-  </div>
-</body>
+<form method="post">
+  {% csrf_token %}
 
-</html>
+  {% bootstrap_form form layout=layout size=size %}
+
+  {% bootstrap_button button_type="submit" content="ログイン" %}
+</form>
+
+{% endblock %}

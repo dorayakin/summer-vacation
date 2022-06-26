@@ -1,39 +1,41 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends 'diaryapp/base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name=”description”>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ホーム</title>
-</head>
+{% load django_bootstrap5 %}
 
-<body>
+{% block title %}
+ホーム
+{% endblock %}
 
-  <h1>Welcome</h1>
-  <h3>{{user.username}}</h3>
+{% block content %}
 
-  {% if latest_diary_list %}
-  <ul>
-    {% for diary in latest_diary_list %}
-    <li><a href="{% url 'diaryapp:detail' diary.id %}">{{ diary.title }}</a>
-      <a href="{% url 'diaryapp:edit' diary.id %}">編集</a>
-    </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p>No diaries are available.</p>
-  {% endif %}
+<h3>{{user.username}}</h3>
+{% if latest_diary_list %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for diary in latest_diary_list %}
 
-  <form action="{% url 'diaryapp:create' %}" method=post>
-    {% csrf_token %}
-    <input type="submit" value="新規投稿">
-  </form>
+  <div class="col">
+    <a href="{% url 'diaryapp:detail' diary.id %}">
+      <div class="card h-100">
+        <!--<img src="..." class="card-img-top" alt="...">-->
+        <div class="card-body">
+          <h5 class="card-title">{{ diary.title }}</h5>
+          <p class="card-text">{{diary.writer.username}}</p>
+          <a class="btn btn-primary" href="{% url 'diaryapp:edit' diary.id %}" role="button">編集</a>
+        </div>
+      </div>
+    </a>
+  </div>
 
-  <form action="{% url 'diaryapp:logout' %}" method=post>{% csrf_token %}
-    <input type="submit" class="button" title="Sign Out" value="Sign Out"></input>
-  </form>
 
-</body>
+  {% endfor %}
+</div>
+{% endif %}
+<form action="{% url 'diaryapp:create' %}" method=post>
+  {% csrf_token %}
+  <input type="submit" value="新規投稿">
+</form>
 
-</html>
+<form action="{% url 'diaryapp:logout' %}" method=post>{% csrf_token %}
+  <input type="submit" class="button" title="Sign Out" value="Sign Out"></input>
+</form>
+{% endblock %}
